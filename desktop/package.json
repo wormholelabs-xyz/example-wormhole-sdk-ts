@@ -1,0 +1,35 @@
+{
+  "name": "ezmode",
+  "version": "1.0.0",
+  "description": "",
+  "type": "module",
+  "main": "index.js",
+  "scripts": {
+    "original": "tsx src/lookupOriginal.ts",
+    "wrapped": "tsx src/lookupWrapped.ts",
+    "destination": "tsx src/lookupDestination.ts",
+    "create": "tsx src/createWrapped.ts",
+    "transfer": "tsx src/tokenBridge.ts",
+    "cctp": "tsx src/cctp.ts",
+    "vaa": "tsx src/getVAA.ts",
+    "msg": "tsx src/messaging.ts",
+    "config": "tsx src/config.ts",
+    "gateway": "tsx src/gateway.ts",
+    "router": "tsx src/router.ts"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@solana/web3.js": "1.91.7",
+    "@wormhole-foundation/sdk": "0.7.0",
+    "@xlabs-xyz/ledger-signer-ethers-v6": "^0.0.1",
+    "@xlabs-xyz/ledger-signer-solana": "^0.0.1"
+  },
+  "devDependencies": {
+    "@types/node": "^20.4.8",
+    "dotenv": "^16.3.1",
+    "tsx": "^3.12.7",
+    "typescript": "^5.1.6"
+  }
+}
