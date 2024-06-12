@@ -24,7 +24,7 @@ import { PhantomProvider, PhantomSigner } from "./wallets/phantom.ts";
 
 const msk = new MetaMaskSDK();
 
-function Msg() {
+function PublishMessage() {
   const [evmProvider, setEvmProvider] = useState<SDKProvider | null>(null);
   const [evmSigner, setEvmSigner] = useState<SignAndSendSigner<
     typeof NETWORK,
@@ -188,4 +188,4 @@ function Message({ message }: { message: VAA<"Uint8Array"> }) {
   );
 }
 
-export default Msg;
+export default PublishMessage;

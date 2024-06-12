@@ -1,10 +1,10 @@
 import React from 'react'
 import ReactDOM from 'react-dom/client'
-import Msg from './Msg.tsx'
 import './index.css'
+import PublishMessage from './PublishMessage.tsx'
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
-    <Msg />
+    <PublishMessage />
   </React.StrictMode>,
 )
