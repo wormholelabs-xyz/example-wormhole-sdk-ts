@@ -7,8 +7,8 @@ import {
   VersionedTransaction,
 } from "@solana/web3.js";
 import {
-  Chain,
   Network,
+  PlatformToChains,
   SignAndSendSigner,
   UnsignedTransaction,
   Wormhole,
@@ -68,12 +68,14 @@ export function isVersionedTransaction(tx: any): tx is VersionedTransaction {
   );
 }
 
-export class PhantomSigner implements SignAndSendSigner<Network, Chain> {
+export class PhantomSigner<C extends PlatformToChains<"Solana">>
+  implements SignAndSendSigner<Network, C>
+{
   private constructor(
     private connection: Connection,
     private provider: PhantomProvider,
     private _address: string,
-    private _chain: Chain
+    private _chain: C
   ) {
     // TODO: Set up event handlers?
   }
@@ -91,7 +93,7 @@ export class PhantomSigner implements SignAndSendSigner<Network, Chain> {
     );
   }
 
-  chain(): Chain {
+  chain(): C {
     return this._chain;
   }
   address(): string {

@@ -2,6 +2,7 @@ import { SDKProvider } from "@metamask/sdk";
 import {
   Chain,
   Network,
+  PlatformToChains,
   SignAndSendSigner,
   UnsignedTransaction,
   encoding,
@@ -10,11 +11,13 @@ import {
 import "./App.css";
 import { NETWORK } from "./consts.ts";
 
-export class MetaMaskSigner implements SignAndSendSigner<Network, Chain> {
+export class MetaMaskSigner<C extends PlatformToChains<"Evm">>
+  implements SignAndSendSigner<Network, C>
+{
   private constructor(
     private provider: SDKProvider,
     private _address: string,
-    private _chain: Chain
+    private _chain: C
   ) {}
 
   static async fromProvider(provider: SDKProvider) {
@@ -37,7 +40,11 @@ export class MetaMaskSigner implements SignAndSendSigner<Network, Chain> {
     if (network !== NETWORK)
       throw new Error(`Invalid network, expected: ${NETWORK} got ${network}`);
 
-    return new MetaMaskSigner(provider, acctResp[0]!, chain);
+    return new MetaMaskSigner(
+      provider,
+      acctResp[0]!,
+      chain as PlatformToChains<"Evm">
+    );
   }
 
   async requestChainChange(chain: Chain) {
@@ -58,7 +65,7 @@ export class MetaMaskSigner implements SignAndSendSigner<Network, Chain> {
     });
   }
 
-  chain(): Chain {
+  chain(): C {
     return this._chain;
   }
   address(): string {

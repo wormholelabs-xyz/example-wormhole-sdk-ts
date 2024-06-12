@@ -1,1 +1,1 @@
-export const NETWORK = "Testnet"
+export const NETWORK: "Testnet" = "Testnet" as const;

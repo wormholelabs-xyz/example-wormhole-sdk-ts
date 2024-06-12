@@ -49,7 +49,7 @@ function App() {
     const s =  isEvm? evmSigner : solSigner;
     if(!s) throw new Error("No signer for: "+ chain)
     if(isEvm){
-      (s as MetaMaskSigner).requestChainChange(chain)
+      (s as MetaMaskSigner<any>).requestChainChange(chain)
     }
     return s
   }
