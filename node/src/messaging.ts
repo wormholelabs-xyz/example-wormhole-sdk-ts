@@ -31,10 +31,11 @@ import { getStuff } from "./helpers.js";
   );
   // submit post msg txs txs
   const [txid] = await signSendWait(chainCtx, msgTxs, signer);
+  console.log("Origin txid: ", txid);
 
+  const [whm] = await chainCtx.parseTransaction(txid.txid);
   // it is also possible to search by txid but takes longer to show up
   // e.g. await wh.getVaaByTxHash(txids[0].txid, "Uint8Array");
-  const [whm] = await chainCtx.parseTransaction(txid.txid);
   const vaa = await wh.getVaa(whm, "Uint8Array");
   console.log(`VAA payload: '${encoding.bytes.decode(vaa!.payload!)}'`);
 
@@ -44,5 +45,8 @@ import { getStuff } from "./helpers.js";
     vaa!
   );
   // submit verify txs
-  console.log(await signSendWait(chainCtx, verifyTxs, signer));
+  console.log(
+    "Verify txids: ",
+    await signSendWait(chainCtx, verifyTxs, signer)
+  );
 })();
