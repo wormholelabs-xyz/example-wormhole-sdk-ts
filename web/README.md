@@ -12,9 +12,13 @@ See the [PhantomSigner](src/phantom.ts) for an example of a `SignAndSendSigner` 
 ## Try it
 
 ```sh
-git clone https://github.com/barnjamin/ezui.git 
-cd ezui
+# Clone it and install deps
+git clone git@github.com:wormholelabs-xyz/example-wormhole-sdk-ts.git
+cd example-wormhole-sdk-ts 
 npm install
+
+# Navigate to web directory and start the web demo 
+cd web
 npm run dev
 ```
 
