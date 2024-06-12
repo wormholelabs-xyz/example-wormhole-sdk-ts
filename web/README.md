@@ -1,5 +1,5 @@
-Wormhole SDK Web Wallet Demo
----------------------------
+Wormhole SDK Web Demo
+----------------------
 
 This demo should serve as an example of how a web wallet can be wrapped to provide one of the `Signer` interfaces required by the [Wormhole SDK](https://github.com/wormhole-foundation/wormhole-sdk-ts).
 

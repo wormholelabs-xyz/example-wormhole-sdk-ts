@@ -6,24 +6,25 @@ Simple demos for the [Wormhole SDK](https://github.com/wormhole-foundation/wormh
 # Setup
 
 ```sh
+
 # Clone repo and install deps 
 git clone git@github.com:wormholelabs-xyz/example-wormhole-sdk-ts.git
 cd example-wormhole-sdk-ts
 npm install
 
-# Setup keys if necessary, see below for details
+# Navigate to node directory and run a demo, see package.json#scripts for others
+cd node
 
-# Navigate to desktop directory and run a demo
+# Setup keys if necessary, see below for details
+# Modify the demo at will
 npm run msg
 ```
-
-This installs `@wormhole-foundation/sdk` and several platform packages.
 
 # Signing Transactions
 
 Add keys in a `.env` file like:
 
-```
+```sh
 SOL_PRIVATE_KEY="BASE_58_PRIVATE_KEY"
 ETH_PRIVATE_KEY="BASE_16_PRIVATE_KEY"
 
