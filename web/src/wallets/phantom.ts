@@ -146,7 +146,7 @@ export class PhantomSigner<
     // Make sure they're all finalized
     await Promise.all(
       txids.map(async (txid) =>
-        this.connection.confirmTransaction(txid, "finalized")
+        this.connection.confirmTransaction(txid, "confirmed")
       )
     );
 
