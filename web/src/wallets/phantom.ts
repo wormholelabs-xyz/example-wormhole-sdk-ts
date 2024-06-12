@@ -107,7 +107,7 @@ export class PhantomSigner<
 
     for (const txn of txs) {
       const { description, transaction } = txn as UnsignedTransaction<
-        Network,
+        N,
         "Solana"
       >;
       console.log(`Signing ${description}`);
@@ -118,12 +118,14 @@ export class PhantomSigner<
       };
 
       // Set recent blockhash
-      const { blockhash } = await this.connection.getLatestBlockhash();
+      const { blockhash, lastValidBlockHeight } =
+        await this.connection.getLatestBlockhash();
       if (isVersionedTransaction(tx)) {
         tx.message.recentBlockhash = blockhash;
         if (signers && signers.length > 0) tx.sign(signers);
       } else {
-        transaction.recentBlockhash = blockhash;
+        tx.recentBlockhash = blockhash;
+        tx.lastValidBlockHeight = lastValidBlockHeight;
         if (signers && signers.length > 0) tx.partialSign(...signers);
       }
 
@@ -131,11 +133,14 @@ export class PhantomSigner<
       // NOTE: this _must_ come after any modifications to the transaction
       // otherwise, the signature wont verify
 
+      console.log("TRANSACTION", tx);
       const { signature: txid } =
         await this.provider.signAndSendTransaction(tx);
 
       if (!txid)
-        throw new Error("Could not determine if transaction was sign and sent");
+        throw new Error(
+          "Could not determine if transaction was signed and sent"
+        );
 
       txids.push(txid);
     }
