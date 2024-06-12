@@ -13,7 +13,7 @@ import {
   UnsignedTransaction,
   Wormhole,
 } from "@wormhole-foundation/sdk";
-import "./App.css";
+import { NETWORK } from "../consts.ts";
 
 // Note: below is from the phantom sandbox
 // https://github.com/phantom/sandbox/blob/main/src/types.ts
@@ -68,8 +68,10 @@ export function isVersionedTransaction(tx: any): tx is VersionedTransaction {
   );
 }
 
-export class PhantomSigner<C extends PlatformToChains<"Solana">>
-  implements SignAndSendSigner<Network, C>
+export class PhantomSigner<
+  N extends typeof NETWORK,
+  C extends PlatformToChains<"Solana">,
+> implements SignAndSendSigner<N, C>
 {
   private constructor(
     private connection: Connection,

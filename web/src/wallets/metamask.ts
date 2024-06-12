@@ -1,18 +1,16 @@
 import { SDKProvider } from "@metamask/sdk";
 import {
   Chain,
-  Network,
   PlatformToChains,
   SignAndSendSigner,
   UnsignedTransaction,
   encoding,
   nativeChainIds,
 } from "@wormhole-foundation/sdk";
-import "./App.css";
-import { NETWORK } from "./consts.ts";
+import { NETWORK } from "../consts.ts";
 
 export class MetaMaskSigner<C extends PlatformToChains<"Evm">>
-  implements SignAndSendSigner<Network, C>
+  implements SignAndSendSigner<typeof NETWORK, C>
 {
   private constructor(
     private provider: SDKProvider,
