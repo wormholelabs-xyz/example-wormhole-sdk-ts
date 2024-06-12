@@ -132,8 +132,6 @@ export class PhantomSigner<
       // Partial sign with any signers passed in
       // NOTE: this _must_ come after any modifications to the transaction
       // otherwise, the signature wont verify
-
-      console.log("TRANSACTION", tx);
       const { signature: txid } =
         await this.provider.signAndSendTransaction(tx);
 
