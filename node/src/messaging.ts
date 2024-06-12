@@ -12,7 +12,7 @@ import { getStuff } from "./helpers.js";
 (async function () {
   const wh = await wormhole("Testnet", [solana, evm]);
 
-  const chainCtx = wh.getChain("Sepolia");
+  const chainCtx = wh.getChain("Solana");
   const coreBridge = await chainCtx.getWormholeCore();
 
   // Get local signer and parse the address
