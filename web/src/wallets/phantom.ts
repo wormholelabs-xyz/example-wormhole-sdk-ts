@@ -7,13 +7,13 @@ import {
   VersionedTransaction,
 } from "@solana/web3.js";
 import {
-  Chain,
   Network,
+  PlatformToChains,
   SignAndSendSigner,
   UnsignedTransaction,
   Wormhole,
 } from "@wormhole-foundation/sdk";
-import "./App.css";
+import { NETWORK } from "../consts.ts";
 
 // Note: below is from the phantom sandbox
 // https://github.com/phantom/sandbox/blob/main/src/types.ts
@@ -68,12 +68,16 @@ export function isVersionedTransaction(tx: any): tx is VersionedTransaction {
   );
 }
 
-export class PhantomSigner implements SignAndSendSigner<Network, Chain> {
+export class PhantomSigner<
+  N extends typeof NETWORK,
+  C extends PlatformToChains<"Solana">,
+> implements SignAndSendSigner<N, C>
+{
   private constructor(
     private connection: Connection,
     private provider: PhantomProvider,
     private _address: string,
-    private _chain: Chain
+    private _chain: C
   ) {
     // TODO: Set up event handlers?
   }
@@ -91,7 +95,7 @@ export class PhantomSigner implements SignAndSendSigner<Network, Chain> {
     );
   }
 
-  chain(): Chain {
+  chain(): C {
     return this._chain;
   }
   address(): string {
@@ -103,7 +107,7 @@ export class PhantomSigner implements SignAndSendSigner<Network, Chain> {
 
     for (const txn of txs) {
       const { description, transaction } = txn as UnsignedTransaction<
-        Network,
+        N,
         "Solana"
       >;
       console.log(`Signing ${description}`);
@@ -114,24 +118,27 @@ export class PhantomSigner implements SignAndSendSigner<Network, Chain> {
       };
 
       // Set recent blockhash
-      const { blockhash } = await this.connection.getLatestBlockhash();
+      const { blockhash, lastValidBlockHeight } =
+        await this.connection.getLatestBlockhash();
       if (isVersionedTransaction(tx)) {
         tx.message.recentBlockhash = blockhash;
         if (signers && signers.length > 0) tx.sign(signers);
       } else {
-        transaction.recentBlockhash = blockhash;
+        tx.recentBlockhash = blockhash;
+        tx.lastValidBlockHeight = lastValidBlockHeight;
         if (signers && signers.length > 0) tx.partialSign(...signers);
       }
 
       // Partial sign with any signers passed in
       // NOTE: this _must_ come after any modifications to the transaction
       // otherwise, the signature wont verify
-
       const { signature: txid } =
         await this.provider.signAndSendTransaction(tx);
 
       if (!txid)
-        throw new Error("Could not determine if transaction was sign and sent");
+        throw new Error(
+          "Could not determine if transaction was signed and sent"
+        );
 
       txids.push(txid);
     }
@@ -139,7 +146,7 @@ export class PhantomSigner implements SignAndSendSigner<Network, Chain> {
     // Make sure they're all finalized
     await Promise.all(
       txids.map(async (txid) =>
-        this.connection.confirmTransaction(txid, "finalized")
+        this.connection.confirmTransaction(txid, "confirmed")
       )
     );
 

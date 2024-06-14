@@ -22,8 +22,8 @@ import { useEffect, useState } from "react";
 
 import "./App.css";
 import { NETWORK } from "./consts.js";
-import { MetaMaskSigner } from "./metamask.ts";
-import { PhantomProvider, PhantomSigner } from "./phantom.ts";
+import { MetaMaskSigner } from "./wallets/metamask.ts";
+import { PhantomProvider, PhantomSigner } from "./wallets/phantom.ts";
 
 const msk = new MetaMaskSDK();
 function App() {
@@ -49,7 +49,7 @@ function App() {
     const s =  isEvm? evmSigner : solSigner;
     if(!s) throw new Error("No signer for: "+ chain)
     if(isEvm){
-      (s as MetaMaskSigner).requestChainChange(chain)
+      (s as MetaMaskSigner<any>).requestChainChange(chain)
     }
     return s
   }
