@@ -1,16 +1,16 @@
 import { MetaMaskSDK, SDKProvider } from "@metamask/sdk";
 import {
-    Chain,
-    PlatformToChains,
-    SignAndSendSigner,
-    Signer,
-    VAA,
-    Wormhole,
-    WormholeMessageId,
-    chainToPlatform,
-    encoding,
-    signSendWait,
-    wormhole
+  Chain,
+  PlatformToChains,
+  SignAndSendSigner,
+  Signer,
+  VAA,
+  Wormhole,
+  WormholeMessageId,
+  chainToPlatform,
+  encoding,
+  signSendWait,
+  wormhole
 } from "@wormhole-foundation/sdk";
 import evm from "@wormhole-foundation/sdk/evm";
 import solana from "@wormhole-foundation/sdk/solana";
@@ -60,18 +60,15 @@ function PublishMessage() {
   useEffect(() => {
     if (phantomProvider || !("phantom" in window) || !wh) return;
     (async function () {
-      // @ts-ignore
-      const provider = window.phantom!.solana as PhantomProvider;
+      const provider = (window.phantom! as {solana:PhantomProvider}).solana;
       if (!provider?.isPhantom) return;
 
       await provider.connect();
-      await PhantomSigner.fromProvider(wh!, provider).then((signer) => {
-        setSolSigner(signer);
-      });
       setPhantomProvider(provider);
-    })().catch((e) => {
-      console.error(e);
-    });
+
+      const signer = await PhantomSigner.fromProvider(wh!, provider)
+      setSolSigner(signer);
+    })().catch((e) => { console.error(e); });
   }, [phantomProvider, wh]);
 
   // Effect for metamask/evm
@@ -80,13 +77,11 @@ function PublishMessage() {
     (async function () {
       await msk.connect();
       const provider = msk.getProvider();
-      await MetaMaskSigner.fromProvider(provider).then((signer) => {
-        setEvmSigner(signer);
-      });
       setEvmProvider(provider);
-    })().catch((e) => {
-      console.error(e);
-    });
+
+      const signer = await MetaMaskSigner.fromProvider(provider)
+      setEvmSigner(signer);
+    })().catch((e) => { console.error(e); });
   }, [evmProvider, wh]);
 
   function getSigner<C extends Chain>(chain: C): Signer<typeof NETWORK, C> {
@@ -110,12 +105,10 @@ function PublishMessage() {
   }
 
   async function start(): Promise<void> {
-    if (!wh) throw new Error("No wormhole");
-
     const signer = getSigner(chain);
     if (!signer) throw new Error("No signer");
 
-    const chainCtx = wh.getChain(signer.chain());
+    const chainCtx = wh!.getChain(signer.chain());
     const snd = Wormhole.chainAddress(signer.chain(), signer.address());
     const core = await chainCtx.getWormholeCore();
 
@@ -139,7 +132,12 @@ function PublishMessage() {
     };
     try {
       // TODO: Get timeout from conf
-      const vaa = await wh!.getVaa(msg, "Uint8Array", 60_000);
+      const chainCtx = wh!.getChain(published.emitterChain)
+      const vaa = await wh!.getVaa(
+        msg,
+        "Uint8Array",
+        chainCtx.config.blockTime * chainCtx.config.finalityThreshold * 1.2
+      );
       if (vaa) setSignedMessage(vaa);
     } catch (e) {
       console.error(e);
