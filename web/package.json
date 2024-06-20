@@ -13,7 +13,7 @@
   "dependencies": {
     "@metamask/sdk": "^0.10.1",
     "@solana/web3.js": "1.91.7",
-    "@wormhole-foundation/sdk": "0.7.0",
+    "@wormhole-foundation/sdk": "0.7.1-beta.1",
     "react": "^18.2.0",
     "react-dom": "^18.2.0"
   },

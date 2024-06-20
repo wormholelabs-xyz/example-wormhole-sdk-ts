@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "description": "Example usage of the Wormhole TS SDK",
   "dependencies": {
-    "@wormhole-foundation/sdk": "0.7.0"
+    "@wormhole-foundation/sdk": "0.7.1-beta.1"
   },
   "devDependencies": {
     "tsx": "^3.12.7",

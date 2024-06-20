@@ -22,7 +22,7 @@
   "license": "ISC",
   "dependencies": {
     "@solana/web3.js": "1.91.7",
-    "@wormhole-foundation/sdk": "0.7.0",
+    "@wormhole-foundation/sdk": "0.7.1-beta.1",
     "@xlabs-xyz/ledger-signer-ethers-v6": "^0.0.1",
     "@xlabs-xyz/ledger-signer-solana": "^0.0.1"
   },
